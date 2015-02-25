@@ -14,10 +14,13 @@ import com.activate.gcm.C2dmModule;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.support.v4.app.NotificationCompat;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 
 import org.json.JSONObject;
 
@@ -92,7 +95,19 @@ public class GCMIntentService extends GCMBaseIntentService {
         }else{
             Log.d(LCAT, "creating notification ...");
 
-            Notification notification = new Notification(icon, tickerText, when);
+            Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), icon);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+										            .setLargeIcon(largeIcon)
+										            .setContentTitle(contentTitle)
+										            .setContentText(contentText)
+										            .setContentIntent(contentIntent)
+										            .setTicker(tickerText);
+        	int smallIcon = systProp.getInt("com.activate.gcm.smallIcon", 0);
+        	if (smallIcon != 0) {
+        		builder.setSmallIcon(smallIcon);
+        	}
+        	Notification notification = builder.build();
+
 			// Custom
 			CharSequence vibrate = (CharSequence) data.get("vibrate");
 			CharSequence sound = (CharSequence) data.get("sound");
@@ -132,7 +147,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 			notification.defaults |= Notification.DEFAULT_LIGHTS;
             
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
-			notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 			String ns = Context.NOTIFICATION_SERVICE;
 			NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
 			mNotificationManager.notify(1, notification);
@@ -163,4 +177,3 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 
 }
-

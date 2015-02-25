@@ -16,3 +16,4 @@ moduleid: com.activate.gcm
 guid: dd798359-e9aa-40a2-9014-46801b85c52f
 platform: android
 minsdk: 1.8.2
+architectures: armeabi;armeabi-v7a;x86
