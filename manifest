@@ -2,7 +2,7 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 0.5
+version: 0.7
 apiversion: 2
 description: GCM functionality for Titanium
 author: Licco Wee <licco.wee@gmail.com>, evopark GmbH <info@evopark.de>
@@ -14,5 +14,5 @@ name: Gcm
 moduleid: com.activate.gcm
 guid: dd798359-e9aa-40a2-9014-46801b85c52f
 platform: android
-minsdk: 1.8.2
+minsdk: 3.5.1
 architectures: armeabi;armeabi-v7a;x86
