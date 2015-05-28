@@ -4,11 +4,10 @@
 #
 version: 0.5
 apiversion: 2
-description: My module
-author: Your Name
-license: Specify your license
-copyright: Copyright (c) 2012 by Your Company
-
+description: GCM functionality for Titanium
+author: Licco Wee <licco.wee@gmail.com>, evopark GmbH <info@evopark.de>
+license: Apache License, Version 2.0
+copyright: Copyright (c) 2012 by licco.wee@gmail.com, (c) 2015 evopark GmbH
 
 # these should not be edited
 name: Gcm
