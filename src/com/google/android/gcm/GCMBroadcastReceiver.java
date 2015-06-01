@@ -46,7 +46,9 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
         Log.v(TAG, "GCM IntentService class: " + className);
         // Delegates to the application-specific intent service.
         GCMBaseIntentService.runIntentInService(context, intent, className);
-        setResult(Activity.RESULT_OK, null /* data */, null /* extra */);
+        if (isOrderedBroadcast()) {
+            setResult(Activity.RESULT_OK, null /* data */, null /* extra */);
+        }
     }
 
     /**
