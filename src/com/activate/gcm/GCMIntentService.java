@@ -33,6 +33,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private static final String MESSAGE_EVENT = "message";
 	private static final String ERROR_EVENT = "error";
 
+	private static int notificationId = 1;
+
 	public GCMIntentService(){
 		super(TiApplication.getInstance().getAppProperties().getString("com.activate.gcm.sender_id", ""));
 	}
@@ -90,9 +92,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// the next two lines initialize the Notification, using the
 		// configurations above
 
-        if(contentText==null){
-            Log.d(LCAT, "Message received , no contentText so will make this silent");
-        }else{
+	// Send to the app if the instance exists, otherwise handle it ourselves as per config.
+	if(C2dmModule.getInstance() != null) {
+		JSONObject json = new JSONObject(data);
+		systProp.setString("com.activate.gcm.last_data", json.toString());
+	        Log.d(LCAT, "sending message to C2dmModule");
+	    	C2dmModule.getInstance().sendMessage(data);
+	} else if( contentText != null ) {
             Log.d(LCAT, "creating notification ...");
 
             Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), icon);
@@ -146,16 +152,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 			
 			notification.defaults |= Notification.DEFAULT_LIGHTS;
             
+			Log.d(LCAT, "pushing to notification manager" );
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
 			String ns = Context.NOTIFICATION_SERVICE;
 			NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-			mNotificationManager.notify(1, notification);
-        }
-
-        JSONObject json = new JSONObject(data);
-        systProp.setString("com.activate.gcm.last_data", json.toString());
-        if (C2dmModule.getInstance() != null){
-            C2dmModule.getInstance().sendMessage(data);
+			mNotificationManager.notify(notificationId++, notification);
         }
 	
     }
