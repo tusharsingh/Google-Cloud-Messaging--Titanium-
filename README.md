@@ -3,7 +3,9 @@
 A Titanium module for registering a device with GCM and handling notifications sent to the device.
 
 Android platform are using c2dm for push notification, but because c2dm have stopped accept new user, so we have decide to use the new service that google provided which is Google Cloud Messaging (GCM).
-Current Latest version is 0.5
+Current Latest version is 0.7
+
+Works with Titanium 5.0.0.GA.
 
 ## Topics Covered ##
 
