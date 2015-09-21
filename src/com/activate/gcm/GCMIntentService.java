@@ -57,6 +57,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		Log.d(LCAT, "Message received");
 
+		notificationId++;
+
 		TiProperties systProp = TiApplication.getInstance().getAppProperties();
 
 		HashMap data = new HashMap();
@@ -75,19 +77,22 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		CharSequence contentTitle = (CharSequence) data.get("title");
 		CharSequence contentText = (CharSequence) data.get("message");
+		CharSequence contentUri = (CharSequence) data.get("uri");
         
         
 		Intent notificationIntent = new Intent(this, GCMIntentService.class);
 
 		Intent launcherintent = new Intent("android.intent.action.MAIN");
-		launcherintent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		launcherintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_FROM_BACKGROUND);
 		//I'm sure there is a better way ...
 		launcherintent.setComponent(ComponentName.unflattenFromString(systProp.getString("com.activate.gcm.component", "")));
 		//
 		launcherintent.addCategory("android.intent.category.LAUNCHER");
+		if( contentUri != null ) {
+			launcherintent.putExtra( "uri", contentUri);
+		}
 
-
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, launcherintent, 0);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, notificationId, launcherintent, 0);
 
 		// the next two lines initialize the Notification, using the
 		// configurations above
@@ -156,7 +161,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
 			String ns = Context.NOTIFICATION_SERVICE;
 			NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-			mNotificationManager.notify(notificationId++, notification);
+			mNotificationManager.notify(notificationId, notification);
         }
 	
     }
